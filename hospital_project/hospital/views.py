@@ -1,10 +1,10 @@
 from django.shortcuts import render
 
 def home(request):
-    return render(request, "base.html")
+    return render(request, "home.html")
 
 def add_patient(request):
-    return render(request, "add_patient.html")
+    return render(request, "patient.html")
 
 def add_doctor(request):
     return render(request, "add_doctor.html")
