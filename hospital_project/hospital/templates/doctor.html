@@ -91,18 +91,19 @@
             </button>
           </li>
         </ul>
-
         <!-- Tab Content -->
         <div class="tab-content" id="doctorTabContent">
           <!-- Login -->
           <div class="tab-pane fade show active" id="login" role="tabpanel">
-            <form action="doctor-dashboard.html" method="get">
+            <form action="{% url 'doctor' %}" method="post">
+              {% csrf_token %}
               <div class="mb-3">
                 <label for="loginEmail" class="form-label">Email</label>
                 <input
                   type="email"
                   class="form-control"
                   id="loginEmail"
+                  name="email"
                   placeholder="Enter email"
                   required
                 />
@@ -113,6 +114,7 @@
                   type="password"
                   class="form-control"
                   id="loginPassword"
+                  name="password"
                   placeholder="Enter password"
                   required
                 />
