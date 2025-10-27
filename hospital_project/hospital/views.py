@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages  # ✅ Import messages
-
+from .models import Patient
 # ----------------------------
 # 🏠 HOME PAGE
 # ----------------------------
@@ -9,36 +9,62 @@ def home(request):
     return render(request, "home.html")
 
 
-# ----------------------------
-# 🧍‍♀️ PATIENT SECTION
-# ----------------------------
+#  PATIENT SECTION
 def patient(request):
-    if request.method == "GET":
-        return render(request, "patient.html")
+    if request.method == "POST":
+        # Registration Form Submission
+        name = request.POST.get("name")
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        phone = request.POST.get("phone")
+        dob = request.POST.get("dob")
+        gender = request.POST.get("gender")
+        blood_group = request.POST.get("blood_group")
+        medical_history = request.POST.get("medical_history")
+        address = request.POST.get("address")
 
-    # ✅ Get form data (must match input names in HTML)
-    email = request.POST.get("email")
-    password = request.POST.get("password")
+        # Save to database
+        Patient.objects.create(
+            name=name,
+            email=email,
+            password=password,
+            phone=phone,
+            dob=dob,
+            gender=gender,
+            blood_group=blood_group,
+            medical_history=medical_history,
+            address=address
+        )
+        messages.success(request, "Patient registered successfully!")
+        return redirect("patient")
 
-    # ✅ Dummy login check
-    if email == "r@gmail.com" and password == "11":
-        request.session["patient_name"] = "Ravi"  # Save name in session
-        return redirect("patient_dashboard")
-    else:
-        messages.error(request, "Invalid Email or Password.")
-        return render(request, "patient.html")
+    return render(request, "patient.html")
+
+# Login View
+def patient_login(request):
+    if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+
+        # Check credentials
+        try:
+            patient = Patient.objects.get(email=email, password=password)
+            request.session["patient_name"] = patient.name
+            return redirect("patient_dashboard")
+        except Patient.DoesNotExist:
+            messages.error(request, "Invalid Email or Password.")
+            return redirect("patient_login")
+
+    return render(request, "patient-login.html")
 
 
 def patient_dashboard(request):
-    # ✅ Retrieve stored session name (default fallback)
     patient_name = request.session.get("patient_name", "Patient")
-    context = {"patient_name": patient_name}
-    return render(request, "patient-dashboard.html", context)
+    return render(request, "patient-dashboard.html", {"patient_name": patient_name})
 
 
 # ----------------------------
 # 👨‍⚕️ DOCTOR SECTION
-# ----------------------------
 def doctor(request):
     if request.method == "GET":
         return render(request, "doctor.html")
