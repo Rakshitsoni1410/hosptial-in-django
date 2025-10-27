@@ -47,7 +47,7 @@ def doctor(request):
     password = request.POST.get("password")
 
     if email == "r1@gmail.com" and password == "10":
-        request.session["doctor_name"] = "Dr. Smith"  # ✅ store temporarily
+        request.session["doctor_name"] = " aayushi "  # ✅ store temporarily
         return redirect("doctor_dashboard")
     else:
         messages.error(request, "Invalid Email or Password.")
