@@ -74,14 +74,18 @@
 
         <div class="tab-content" id="patientTabContent">
           <!-- Login Form -->
+          <!-- Login Form -->
           <div class="tab-pane fade show active" id="login" role="tabpanel">
-            <form action="patient-dashboard.html" method="get">
+            <form action="{% url 'patient' %}" method="post">
+              {% csrf_token %}
               <div class="mb-3">
                 <label for="loginEmail" class="form-label">Email address</label>
                 <input
                   type="email"
                   class="form-control"
                   id="loginEmail"
+                  name="email"
+                  placeholder="Enter your email"
                   required
                 />
               </div>
@@ -91,12 +95,22 @@
                   type="password"
                   class="form-control"
                   id="loginPassword"
+                  name="password"
+                  placeholder="Enter your password"
                   required
                 />
               </div>
               <button type="submit" class="btn btn-primary w-100">Login</button>
             </form>
           </div>
+          <!-- ✅ Display messages -->
+          {% if messages %}
+          <div>
+            {% for message in messages %}
+            <p style="color: red">{{ message }}</p>
+            {% endfor %}
+          </div>
+          {% endif %}
 
           <!-- Registration Form -->
           <div class="tab-pane fade" id="register" role="tabpanel">

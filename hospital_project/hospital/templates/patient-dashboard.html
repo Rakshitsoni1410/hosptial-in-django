@@ -45,7 +45,7 @@
         </a>
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a href="index.html" class="nav-link text-primary">
+            <a href="{% url 'home' %}" class="nav-link text-primary">
               <i class="fa fa-home fa-lg"></i> Home
             </a>
           </li>
@@ -125,7 +125,7 @@
             </div>
             <h5 class="mb-2">Logout</h5>
             <p>Sign out securely from your account.</p>
-            <a href="patient.html" class="btn btn-outline-danger btn-sm"
+            <a href="{% url 'home' %}" class="btn btn-outline-danger btn-sm"
               >Logout</a
             >
           </div>

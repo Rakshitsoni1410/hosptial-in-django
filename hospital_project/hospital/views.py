@@ -1,22 +1,28 @@
-from django.shortcuts import render,redirect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from django.contrib import messages  # ✅ Import messages
 
 def home(request):
     return render(request, "home.html")
+
 def patient(request):
     if request.method == "GET":
-        # Just show the login page
         return render(request, "patient.html")
 
-    # Handle POST request (login form submit)
+    # Get form data
     email = request.POST.get("email")
     password = request.POST.get("password")
 
-    # Dummy authentication check
+    # Dummy login check
     if email == "r@gmail.com" and password == "11":
-        # Redirect to dashboard (use URL name or template)
-        return redirect("/patient-dashboard/")  # or redirect('patient_dashboard')
+        return redirect("patient_dashboard")
     else:
-        return HttpResponse("Invalid User")
+        # ✅ Use Django messages to show alert
+        messages.error(request, "Invalid Email or Password.")
+        return render(request, "patient.html")
+
+def patient_dashboard(request):
+    return render(request, "patient-dashboard.html")
+
 def doctor(request):
-    return render(request,"doctor.html")
+    return render(request, "doctor.html")
