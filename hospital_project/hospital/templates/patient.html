@@ -74,9 +74,8 @@
 
         <div class="tab-content" id="patientTabContent">
           <!-- Login Form -->
-          <!-- Login Form -->
           <div class="tab-pane fade show active" id="login" role="tabpanel">
-            <form action="{% url 'patient' %}" method="post">
+            <form action="{% url 'patient_login' %}" method="post">
               {% csrf_token %}
               <div class="mb-3">
                 <label for="loginEmail" class="form-label">Email address</label>
@@ -122,7 +121,7 @@
                 <input
                   type="text"
                   class="form-control"
-                  id="fullName"
+                  id="name"
                   name="name"
                   required
                 />
