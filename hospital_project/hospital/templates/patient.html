@@ -33,10 +33,11 @@
     <div class="container">
       <div class="card p-4 bg-light">
         <h2 class="text-center mb-4 fw-bold text-primary">Patient Portal</h2>
+
         <!-- Home Icon -->
-        <div class="mb-3">
+        <div class="mb-3 text-center">
           <a href="/home" class="text-decoration-none text-primary fs-4">
-            <i class="fas fa-home"></i> Home
+            🏠 Home
           </a>
         </div>
 
@@ -75,15 +76,16 @@
         <div class="tab-content" id="patientTabContent">
           <!-- Login Form -->
           <div class="tab-pane fade show active" id="login" role="tabpanel">
-            <form action="{% url 'patient_login' %}" method="post">
+            <form method="POST">
               {% csrf_token %}
+              <input type="hidden" name="login" />
               <div class="mb-3">
                 <label for="loginEmail" class="form-label">Email address</label>
                 <input
                   type="email"
                   class="form-control"
                   id="loginEmail"
-                  name="email"
+                  name="login_email"
                   placeholder="Enter your email"
                   required
                 />
@@ -94,7 +96,7 @@
                   type="password"
                   class="form-control"
                   id="loginPassword"
-                  name="password"
+                  name="login_password"
                   placeholder="Enter your password"
                   required
                 />
@@ -102,20 +104,12 @@
               <button type="submit" class="btn btn-primary w-100">Login</button>
             </form>
           </div>
-          <!-- ✅ Display messages -->
-          {% if messages %}
-          <div>
-            {% for message in messages %}
-            <p style="color: red">{{ message }}</p>
-            {% endfor %}
-          </div>
-          {% endif %}
 
           <!-- Registration Form -->
           <div class="tab-pane fade" id="register" role="tabpanel">
             <form method="POST">
               {% csrf_token %}
-
+              <input type="hidden" name="register" />
               <div class="mb-3">
                 <label for="fullName" class="form-label">Full Name</label>
                 <input
@@ -241,6 +235,15 @@
             </form>
           </div>
         </div>
+
+        <!-- ✅ Display messages -->
+        {% if messages %}
+        <div class="mt-3 text-center">
+          {% for message in messages %}
+          <div class="alert alert-info p-2">{{ message }}</div>
+          {% endfor %}
+        </div>
+        {% endif %}
       </div>
     </div>
 
