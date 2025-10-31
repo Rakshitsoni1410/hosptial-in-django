@@ -16,5 +16,19 @@ class Patient(models.Model):
         return f"{self.name} ({self.email})"
 
 
+class Doctor(models.Model):
+    fullName = models.CharField(max_length=100)
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=128)
+    phone = models.CharField(max_length=15)
+    gender = models.CharField(max_length=10)
+    specialization = models.CharField(max_length=100)
+    degree = models.CharField(max_length=50)
+    experience = models.PositiveIntegerField()
+    clinicAddress = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True) 
+
+    def __str__(self):
+        return f"{self.fullName} ({self.specialization})"
 
 
