@@ -9,10 +9,9 @@ def home(request):
 
 
 def patient(request):
-    # Handle Registration and Login in same view
     if request.method == "POST":
         if "register" in request.POST:
-            # Registration form
+        
             name = request.POST.get("name")
             email = request.POST.get("email")
             password = request.POST.get("password")
@@ -23,7 +22,6 @@ def patient(request):
             medical_history = request.POST.get("medical_history")
             address = request.POST.get("address")
 
-            # Check duplicate email
             if Patient.objects.filter(email=email).exists():
                 messages.error(request, "Email already registered!")
             else:
@@ -114,12 +112,5 @@ def doctor(request):
             
             return redirect("doctor")
 
-    return render(request, "doctor.html")
-def doctor_dashboard(request):
     return render(request, "doctor-dashboard.html")
-def logout_user(request):
-    logout(request)
-    request.session.flush()  # clears all session data
-    messages.success(request, "You have been logged out successfully.")
-    return redirect('home')
 
