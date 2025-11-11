@@ -64,21 +64,16 @@ def doctor(request):
         password = request.POST.get("password")
 
         doctor_exists = Doctor.objects.filter(email=email).first()
-        print("Doctor found:", doctor_exists)  # Debug line
+        
 
-        if doctor_exists:
-            print("Password entered:", password)
-            print("Hashed password in DB:", doctor_exists.password)
-
+        if doctor_exists:        
             if check_password(password, doctor_exists.password):
-                print("✅ Password match successful!")
+                
                 request.session["doctor_name"] = doctor_exists.fullName
                 return redirect("doctor_dashboard")
             else:
-                print("❌ Password mismatch!")
                 messages.error(request, "Invalid password.")
         else:
-            print("❌ Doctor not found!")
             messages.error(request, "Doctor not found. Please contact admin.")
 
     return render(request, "doctor.html")
