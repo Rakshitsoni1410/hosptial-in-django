@@ -58,59 +58,31 @@ def patient(request):
 def patient_dashboard(request):
     patient_name = request.session.get("patient_name", "Patient")
     return render(request, "patient-dashboard.html", {"patient_name": patient_name})
-
-
 def doctor(request):
     if request.method == "POST":
-        # Common fields
         email = request.POST.get("email")
         password = request.POST.get("password")
 
-        # Detect whether user is trying to login or register
-        if "fullName" in request.POST:
-            # --- Registration process ---
-            fullName = request.POST.get("fullName")
-            phone = request.POST.get("phone")
-            gender = request.POST.get("gender")
-            specialization = request.POST.get("specialization")
-            degree = request.POST.get("degree")
-            experience = request.POST.get("experience")
-            clinicAddress = request.POST.get("clinicAddress")
+        doctor_exists = Doctor.objects.filter(email=email).first()
+        print("Doctor found:", doctor_exists)  # Debug line
 
-            # Check if email already exists
-            if Doctor.objects.filter(email=email).exists():
-                messages.error(request, "Email already registered.")
-                return render(request, "doctor.html")
+        if doctor_exists:
+            print("Password entered:", password)
+            print("Hashed password in DB:", doctor_exists.password)
 
-            # Save new doctor
-            doctor = Doctor(
-                fullName=fullName,
-                email=email,
-                password=make_password(password),  # Encrypt password
-                phone=phone,
-                gender=gender,
-                specialization=specialization,
-                degree=degree,
-                experience=experience,
-                clinicAddress=clinicAddress
-            )
-            doctor.save()
-            messages.success(request, "Registration successful! Please login.")
-            return redirect("doctor")
-
+            if check_password(password, doctor_exists.password):
+                print("✅ Password match successful!")
+                request.session["doctor_name"] = doctor_exists.fullName
+                return redirect("doctor_dashboard")
+            else:
+                print("❌ Password mismatch!")
+                messages.error(request, "Invalid password.")
         else:
-            # --- Login process ---
-            try:
-                doctor = Doctor.objects.get(email=email)
-                if check_password(password, doctor.password):
-                    messages.success(request, f"Welcome Dr. {doctor.fullName}!")
-                    return redirect("doctor_dashboard")  # change this to your dashboard page
-                else:
-                    messages.error(request, "Invalid password.")
-            except Doctor.DoesNotExist:
-                messages.error(request, "Doctor not found. Please register first.")
-            
-            return redirect("doctor")
+            print("❌ Doctor not found!")
+            messages.error(request, "Doctor not found. Please contact admin.")
 
-    return render(request, "doctor-dashboard.html")
+    return render(request, "doctor.html")
 
+def doctor_dashboard(request):
+    doctor_name = request.session.get("doctor_name", "Doctor")
+    return render(request, "doctor-dashboard.html", {"doctor_name": doctor_name})
