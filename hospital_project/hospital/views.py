@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import Patient, Doctor
 from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth import logout
 
 def home(request):
     return render(request, "home.html")
@@ -116,4 +117,9 @@ def doctor(request):
     return render(request, "doctor.html")
 def doctor_dashboard(request):
     return render(request, "doctor-dashboard.html")
+def logout_user(request):
+    logout(request)
+    request.session.flush()  # clears all session data
+    messages.success(request, "You have been logged out successfully.")
+    return redirect('home')
 

@@ -143,7 +143,7 @@
 
   <!-- Dashboard Content -->
   <div class="container my-5">
-    <h2 class="mb-4 text-center">👨‍⚕️ Welcome, Dr. {{ doctor_name|default:"Ravi" }}</h2>
+    <h2 class="mb-4 text-center"> Welcome, Dr. {{ doctor_name|default:"Ravi" }}</h2>
 
     <div class="row g-4">
       <!-- Appointments -->
@@ -199,16 +199,38 @@
       </div>
 
       <!-- Logout -->
-      <div class="col-md-4">
-        <div class="card dashboard-card p-4 text-center">
-          <div class="icon-box mb-3 text-danger"><i class="fa-solid fa-right-from-bracket"></i></div>
-          <h5>Logout</h5>
-          <p class="text-muted">Sign out securely from your account.</p>
-          <a href="{% url 'home' %}" class="btn btn-outline-danger btn-sm">Logout</a>
-        </div>
-      </div>
+     <div class="col-md-4">
+  <div class="card dashboard-card p-4 text-center">
+    <div class="icon-box mb-3 text-danger">
+      <i class="fa-solid fa-right-from-bracket"></i>
     </div>
+    <h5>Logout</h5>
+    <p class="text-muted">Sign out securely from your account.</p>
+
+    <form action="{% url 'logout' %}" method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-outline-danger btn-sm d-flex align-items-center justify-content-center gap-2" style="transition: all 0.3s;">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Logout
+      </button>
+    </form>
   </div>
+</div>
+
+<style>
+  .btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: white;
+    transform: scale(1.05);
+  }
+
+  .btn-outline-danger:hover i {
+    transform: translateX(4px);
+    transition: transform 0.3s;
+  }
+</style>
+
+ </div>
 
   <footer>
     © 2025 HealthCare+ | Designed with ❤️ by Hospital System Team

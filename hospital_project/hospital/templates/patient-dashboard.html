@@ -127,7 +127,7 @@
 
   <!-- Dashboard Content -->
   <div class="container my-5">
-    <h2 class="mb-4 text-center">👩‍🦰 Welcome, {{ request.user.username|default:"rakshit " }}</h2>
+    <h2 class="mb-4 text-center"> Welcome, {{ request.user.username|default:"rakshit " }}</h2>
 
     <div class="row g-4">
       <!-- Appointments -->
@@ -188,7 +188,7 @@
           <div class="icon-box mb-3 text-danger"><i class="fa-solid fa-right-from-bracket"></i></div>
           <h5>Logout</h5>
           <p class="text-muted">Sign out securely from your account.</p>
-          <a href="{% url 'home' %}" class="btn btn-outline-danger btn-sm">Logout</a>
+          <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm">Logout</a>
         </div>
       </div>
     </div>
