@@ -81,3 +81,65 @@ def doctor(request):
 def doctor_dashboard(request):
     doctor_name = request.session.get("doctor_name", "Doctor")
     return render(request, "doctor-dashboard.html", {"doctor_name": doctor_name})
+
+ADMIN_EMAIL = "admin@gmail.com"
+ADMIN_PASSWORD = "admin123"
+
+# 🧑‍💼 Admin Login
+def admin_login(request):
+    if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+
+        if email == ADMIN_EMAIL and password == ADMIN_PASSWORD:
+            request.session["is_admin"] = True
+            messages.success(request, "Welcome Admin!")
+            return redirect("admin_panel")
+        else:
+            messages.error(request, "Invalid credentials.")
+    return render(request, "admin-login.html")
+
+# 🏥 Admin Panel (View + Add Doctors)
+def admin_panel(request):
+    if not request.session.get("is_admin"):
+        messages.warning(request, "Please login as admin first.")
+        return redirect("admin_login")
+    patient = Patient.objects.all()
+    doctors = Doctor.objects.all()
+    return render(request, "admin-panel.html", {"doctors": doctors, "patients": patient,"total_doctors": doctors.count(), "total_patients": patient.count()})
+
+def add_doctor(request):
+    if not request.session.get("is_admin"):
+        return redirect("admin_login")
+
+    if request.method == "POST":
+        fullName = request.POST.get("fullName")
+        email = request.POST.get("email")
+        password = make_password(request.POST.get("password"))
+        phone = request.POST.get("phone")
+        gender = request.POST.get("gender")
+        specialization = request.POST.get("specialization")
+        degree = request.POST.get("degree")
+        experience = request.POST.get("experience")
+        clinicAddress = request.POST.get("clinicAddress")
+
+        # Avoid duplicates
+        if Doctor.objects.filter(email=email).exists():
+            messages.error(request, "Doctor with this email already exists!")
+        else:
+            Doctor.objects.create(
+                fullName=fullName,
+                email=email,
+                password=password,
+                phone=phone,
+                gender=gender,
+                specialization=specialization,
+                degree=degree,
+                experience=experience,
+                clinicAddress=clinicAddress
+            )
+            messages.success(request, f"Doctor {fullName} added successfully!")
+
+        return redirect("admin_panel")
+
+
