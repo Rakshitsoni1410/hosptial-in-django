@@ -207,7 +207,7 @@
     <h5>Logout</h5>
     <p class="text-muted">Sign out securely from your account.</p>
 
-    <form action="{% url 'logout' %}" method="post">
+    <form action="{% url 'home' %}" method="post">
       {% csrf_token %}
       <button type="submit" class="btn btn-outline-danger btn-sm d-flex align-items-center justify-content-center gap-2" style="transition: all 0.3s;">
         <i class="fa-solid fa-right-from-bracket"></i>
