@@ -10,16 +10,18 @@ class User(AbstractUser):
     )
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='patient')
 
-    def is_admin(self):
-        return self.role == 'admin'
-
-    def is_doctor(self):
-        return self.role == 'doctor'
-
-    def is_patient(self):
-        return self.role == 'patient'
-
-
+    groups = models.ManyToManyField(
+        'auth.Group',
+        related_name='hospital_users',
+        blank=True
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        related_name='hospital_users',
+        blank=True
+    )
+##admin@hospital.com admin@hospital.com patient
+#admin123 admin123@gmail.com patient
 class Patient(models.Model):
     GENDER_CHOICES = (('M', 'Male'), ('F', 'Female'), ('O', 'Other'))
     DISEASE_CHOICES = (

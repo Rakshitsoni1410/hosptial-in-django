@@ -22,14 +22,24 @@ def home(request):
 def login_view(request):
     if request.user.is_authenticated:
         return redirect('home')
+
     if request.method == 'POST':
-        user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
+        username = request.POST.get('email')
+        password = request.POST.get('password')
+
+        user = authenticate(
+            request,
+            username=username,
+            password=password
+        )
+
         if user:
             login(request, user)
             return redirect('home')
-        messages.error(request, 'Invalid username or password.')
-    return render(request, 'auth/login.html')
 
+        messages.error(request, 'Invalid email or password.')
+
+    return render(request, 'auth/login.html')
 def logout_view(request):
     logout(request)
     return redirect('login')
